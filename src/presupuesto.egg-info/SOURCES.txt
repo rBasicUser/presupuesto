@@ -1,0 +1,7 @@
+pyproject.toml
+src/parsers/__init__.py
+src/presupuesto/__init__.py
+src/presupuesto.egg-info/PKG-INFO
+src/presupuesto.egg-info/SOURCES.txt
+src/presupuesto.egg-info/dependency_links.txt
+src/presupuesto.egg-info/top_level.txt
