@@ -5,3 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "presupuesto"
 version = "0.1.0"
+
+dependencies = [
+    "pdfplumber"
+]
