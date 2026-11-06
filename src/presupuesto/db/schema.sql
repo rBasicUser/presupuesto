@@ -3,14 +3,11 @@
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE fact_presupuesto(
-    anio_mes       TEXT,
-    subcategoria   TEXT REFERENCES dim_categorias(subcategoria),
+    anio_mes       TEXT NOT NULL,
+    subcategoria   TEXT NOT NULL REFERENCES dim_categorias(subcategoria),
     gran_categoria TEXT,
-    tipo_flujo     TEXT,
-    monto          FLOAT,
-    moneda         TEXT,
-    tipo_cambio    FLOAT,
-    monto_base     FLOAT,
+    tipo_flujo     TEXT REFERENCES dim_tipo_flujo(tipo_flujo),
+    monto          REAL,
     PRIMARY KEY (anio_mes, subcategoria)
 );
 
@@ -22,63 +19,64 @@ CREATE TABLE fact_transaccion(
     nombre_cuenta  TEXT,
     subcategoria   TEXT REFERENCES dim_categorias(subcategoria),
     gran_categoria TEXT,
-    tipo_flujo     TEXT,
+    comentario     TEXT,
+    tipo_flujo     TEXT REFERENCES dim_tipo_flujo(tipo_flujo),
     tipo_mov       TEXT,
-    signo          INTEGER CHECK (signo IN (-1, 1)),
-    monto          FLOAT
+    signo          TEXT CHECK (signo IN ('POSITIVE', 'NEGATIVE')),
+    monto          REAL,
+    moneda         TEXT,
+    monto_signado  REAL
+
 );
 
 CREATE TABLE fact_valuaciones(
-    fecha             TEXT REFERENCES dim_calendario(fecha),
-    id_cuenta         TEXT REFERENCES dim_cuentas(id_cuenta),
-    valor_mercado_gtq FLOAT,
+    fecha             TEXT NOT NULL REFERENCES dim_calendario(fecha),
+    id_cuenta         TEXT NOT NULL REFERENCES dim_cuentas(id_cuenta),
+    valor_mercado_gtq REAL,
     nota              TEXT,
     PRIMARY KEY (fecha, id_cuenta)
 );
 
 CREATE TABLE dim_tipo_flujo(
-    tipo_flujo        TEXT PRIMARY KEY,
+    tipo_flujo        TEXT PRIMARY KEY NOT NULL,
     definicion        TEXT,
     afecta_patrimonio INTEGER CHECK (afecta_patrimonio IN (0, 1)),
     en_FCF_operativo  INTEGER CHECK (en_FCF_operativo IN (0, 1)),
     en_FCF_disponible INTEGER CHECK (en_FCF_disponible IN (0, 1)),
-    es_transferencia  INTEGER CHECK (es_transferencia IN (0, 1))
+    es_transferencia_entre_cuentas INTEGER CHECK (es_transferencia_entre_cuentas IN (0, 1))
 );
 
 CREATE TABLE dim_categorias(
     gran_categoria TEXT NOT NULL,
-    subcategoria   TEXT PRIMARY KEY,
+    subcategoria   TEXT PRIMARY KEY NOT NULL,
     tipo_flujo     TEXT REFERENCES dim_tipo_flujo(tipo_flujo)
 );
 
 CREATE TABLE dim_cuentas(
-    id_cuenta           TEXT PRIMARY KEY,
+    id_cuenta           TEXT PRIMARY KEY NOT NULL,
     nombre_cuenta       TEXT,
     clase               TEXT,
     tipo_cuenta         TEXT,
-    moneda              TEXT,
-    saldo_inicial       FLOAT,
-    fecha_corte_inicial TEXT,
+    saldo_inicial       REAL,
     activa              INTEGER CHECK (activa IN (0, 1)),
-    saldo_movimientos   FLOAT
+    saldo_movimiento    REAL
 );
 
 CREATE TABLE dim_objetivos(
     id_objetivo     INTEGER PRIMARY KEY,
     nombre_objetivo TEXT,
-    tipo            TEXT,
     id_cuenta       TEXT REFERENCES dim_cuentas(id_cuenta),
-    monto_meta      FLOAT,
+    monto_meta      REAL,
     fecha_inicio    TEXT,
     fecha_meta      TEXT,
-    saldo_actual    FLOAT,
-    progreso        FLOAT,
-    meses_restantes FLOAT,
-    aporte_mensual  FLOAT
+    saldo_actual    REAL,
+    progreso        REAL,
+    meses_restantes REAL,
+    aporte_mensual  REAL
 );
 
 CREATE TABLE dim_calendario (
-    fecha       TEXT PRIMARY KEY,
+    fecha       TEXT PRIMARY KEY NOT NULL,
     anio        INTEGER,
     mes         INTEGER,
     anio_mes    TEXT,
