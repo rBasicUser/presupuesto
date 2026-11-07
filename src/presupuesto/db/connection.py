@@ -9,7 +9,7 @@ RAIZ = CARPETA_DB.parents[2]
 
 # Rutas de los dos archivos
 RUTA_SCHEMA = CARPETA_DB / "schema.sql"
-RUTA_DB = RAIZ / "data" / "presupuesto.db"
+RUTA_DB = RAIZ / "data" / "gold" / "presupuesto.db"
 
 
 def crear_base():
