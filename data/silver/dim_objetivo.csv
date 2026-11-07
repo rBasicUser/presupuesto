@@ -1,2 +1,0 @@
-﻿ID,Nombre del objetivo,Tipo,ID_Cuenta_Vinculada,Monto_Meta,Fecha_Inicio,Fecha_Meta,Saldo_Actual,Progreso_%,Meses_Restantes,Aporte_Mensual_Requerido
-OBJ01,Llevar a cero Tarjeta de Crédito BAC,Deuda,CTA01,4000,2026-08-01,2026-10-01,149,0.03725,2,1925.5
