@@ -4,6 +4,8 @@ from decimal import Decimal
 
 # 1. Ruta del archivo
 ruta = "data/bronze/CTA_BAC_CrED_oct_2026.csv"
+ruta_salida = "data/silver/bac_credito.csv"
+id_cuenta = "CTA01"  # tus dos tarjetas comparten el mismo id_cuenta
 
 # 2. Cargar archivo
 with open(ruta, mode="r", encoding="utf-8-sig") as archivo:
@@ -29,8 +31,10 @@ encabezado = next(csv.reader([filas[inicio]]))
 if len(encabezado) != 4:
     raise ValueError(f"Se esperaban 4 columnas y hay {len(encabezado)}")
 
+##
 nombres = ["fecha", "descripcion", "monto_quetzales", "monto_dolares"]
 datos = list(csv.DictReader(filas[inicio + 1:], fieldnames=nombres))
+##
 
 # 6. Clasificar filas: saldo anterior, tarjeta, transacciones y final
 saldo_anterior = None
@@ -113,3 +117,44 @@ print(len(registros), "transacciones")
 print("Cuadre OK:", saldo_corte_quetzales, "Q /", saldo_corte_dolares, "USD")
 print(registros[0])
 print(registros[-1])
+
+# 10. Derivar monto y moneda (contrato de salida: fecha, id_cuenta, descripcion, monto, moneda)
+# El monto se copia con el signo que trae el archivo
+# Anomalía: ambas columnas en cero o ambas distintas de cero -> se detiene el parser
+salida = []
+for registro in registros:
+    quetzales = registro["monto_quetzales"] or 0  # None (celda vacía) cuenta como 0, igual que en el cuadre
+    dolares = registro["monto_dolares"] or 0
+
+    if quetzales == 0 and dolares == 0:
+        raise ValueError(f"Fila con ambos montos en cero: {registro}")
+
+    if quetzales != 0 and dolares != 0:
+        raise ValueError(f"Fila con monto en quetzales y en dólares a la vez: {registro}")
+
+    if quetzales != 0:
+        monto = quetzales
+        moneda = "GTQ"
+    else:
+        monto = dolares
+        moneda = "USD"
+
+    salida.append({
+        "fecha": registro["fecha"],
+        "id_cuenta": id_cuenta,
+        "descripcion": registro["descripcion"],
+        "monto": monto,
+        "moneda": moneda,
+    })
+
+print(len(salida), "filas en la salida")
+
+# 11. Guardar en silver
+columnas = ["fecha", "id_cuenta", "descripcion", "monto", "moneda"]
+
+with open(ruta_salida, mode="w", encoding="utf-8", newline="") as archivo_salida:
+    escritor = csv.DictWriter(archivo_salida, fieldnames=columnas)
+    escritor.writeheader()
+    escritor.writerows(salida)
+
+print("Archivo guardado en:", ruta_salida)
