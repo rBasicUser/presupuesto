@@ -92,3 +92,22 @@ WITH RECURSIVE dias(fecha) AS (
 )
 INSERT INTO dim_calendario (fecha)
 SELECT fecha FROM dias;
+
+-- Vista de objetivos: calcula progreso, meses_restantes y aporte_mensual
+-- cada vez que se consulta, con la fecha del día.
+CREATE VIEW v_objetivos AS
+SELECT
+id_objetivo,
+nombre_objetivo,
+id_cuenta,
+monto_meta,
+fecha_inicio,
+fecha_meta,
+saldo_actual,
+1.0 * saldo_actual / monto_meta AS progreso,
+(strftime('%Y', fecha_meta) - strftime('%Y', 'now')) * 12
+  + (strftime('%m', fecha_meta) - strftime('%m', 'now')) AS meses_restantes,
+1.0 * (monto_meta - saldo_actual) /
+  ((strftime('%Y', fecha_meta) - strftime('%Y', 'now')) * 12
+  + (strftime('%m', fecha_meta) - strftime('%m', 'now'))) AS aporte_mensual
+FROM dim_objetivos;
