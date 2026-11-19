@@ -10,6 +10,7 @@ RAIZ = CARPETA_DB.parents[2]
 # Rutas de los dos archivos
 RUTA_SCHEMA = CARPETA_DB / "schema.sql"
 RUTA_DB = RAIZ / "data" / "gold" / "presupuesto.db"
+RUTA_SEED = CARPETA_DB / "seed.sql"
 
 
 def crear_base():
@@ -28,7 +29,36 @@ def crear_base():
 
     print(f"Base creada en: {RUTA_DB}")
 
+def cargar_seed():
+    
+    # 1. Leer el texto de seed.sql
+    texto_seed = RUTA_SEED.read_text(encoding="utf-8")
+
+    # 2. Abrir la base que ya creó crear_base()
+    conn = sqlite3.connect(RUTA_DB)
+
+    # 3. Activar las llaves foráneas en esta conexión
+    conn.execute("PRAGMA foreign_keys = ON")
+
+    # 4. Borrar los datos anteriores de las tablas del seed
+    #(primero las que apuntan a otras, por las llaves foráneas)
+    conn.execute("DELETE FROM dim_objetivos")
+    conn.execute("DELETE FROM dim_categorias")
+    conn.execute("DELETE FROM dim_cuentas")
+    conn.execute("DELETE FROM dim_tipo_flujo")
+
+
+    # 4. Ejecutar todos los INSERT del archivo
+    conn.executescript(texto_seed)
+
+    
+    # 5. Confirmar y cerrar
+    conn.commit()
+    conn.close()
+
+    print(f"Datos semilla cargados en: {RUTA_DB}")
 
 # Esto solo corre cuando ejecutas este archivo directamente
 if __name__ == "__main__":
     crear_base()
+    cargar_seed()
