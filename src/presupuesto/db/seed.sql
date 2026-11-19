@@ -36,6 +36,7 @@ INSERT INTO dim_tipo_flujo(
 VALUES
 ('Ingreso', 'Entrada de dinero por trabajo, rendimientos u otros. Aumenta patrimonio.', 1, 1, 1, 0),
 ('Gasto_Fijo', 'Gasto recurrente comprometido (renta, servicios). Destruye patrimonio.', 1, 1, 1, 0),
+('Gasto_Variable', 'Gasto discrecional. Destruye patrimonio.', 1, 1, 1, 0),
 ('Impuesto', 'Impuestos y contribuciones sociales. Destruye patrimonio.', 1, 1, 1, 0),
 ('Interes_Deuda', 'Costo financiero de la deuda. Destruye patrimonio.', 1, 1, 1, 0),
 ('Comision_Bancaria', 'Comisiones y tarifas. Destruye patrimonio.', 1, 1, 1, 0),
@@ -110,12 +111,8 @@ nombre_objetivo,
 id_cuenta,
 monto_meta,
 fecha_inicio,
-fecha_meta,
-saldo_actual,
-progreso,
-meses_restantes,
-aporte_mensual
+fecha_meta
 )
 VALUES
-('OBJ01','Enganche apartamento Ferranta 12', 'Inversión','CT017','36600','2026-10-01','2028-06-01',3000,NULL,NULL,NULL)
+('OBJ01','Enganche apartamento Ferranta 12','CTA17','36600','2026-10-01','2028-06-01')
     
