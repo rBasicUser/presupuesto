@@ -63,7 +63,7 @@ CREATE TABLE dim_cuentas(
 );
 
 CREATE TABLE dim_objetivos(
-    id_objetivo     INTEGER PRIMARY KEY,
+    id_objetivo     TEXT PRIMARY KEY NOT NULL,
     nombre_objetivo TEXT,
     id_cuenta       TEXT REFERENCES dim_cuentas(id_cuenta),
     monto_meta      REAL,
