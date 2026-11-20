@@ -16,16 +16,10 @@ CREATE TABLE fact_transaccion(
     fecha          TEXT REFERENCES dim_calendario(fecha),
     anio_mes       TEXT,
     id_cuenta      TEXT REFERENCES dim_cuentas(id_cuenta),
-    nombre_cuenta  TEXT,
     subcategoria   TEXT REFERENCES dim_categorias(subcategoria),
-    gran_categoria TEXT,
     comentario     TEXT,
-    tipo_flujo     TEXT REFERENCES dim_tipo_flujo(tipo_flujo),
-    tipo_mov       TEXT,
-    signo          TEXT CHECK (signo IN ('POSITIVE', 'NEGATIVE')),
     monto          REAL,
-    moneda         TEXT,
-    monto_signado  REAL
+    moneda         TEXT
 
 );
 
