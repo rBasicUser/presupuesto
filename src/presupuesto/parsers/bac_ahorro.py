@@ -7,7 +7,7 @@ import csv
 from datetime import datetime
 
 # 0. Parámetros
-ruta = "data/bronze/CTA_BAC_AHORRO.csv"
+ruta = "data/bronze/CUENTA_AHORRO_BAC.csv"
 ruta_salida = "data/silver/bac_ahorro.csv"
 id_cuenta = "CTA_XX"  # <- pon aquí el id_cuenta de tu cuenta de ahorro BAC
 
@@ -48,7 +48,7 @@ for transaccion in datos[inicio + 1:]:
         datetime.strptime(fecha_texto, "%d/%m/%Y")
     except ValueError:  # no es fecha
         final = datos.index(transaccion, inicio + 1)
-        print("A la mierda entonces, aquí termina el archivo: ", final)
+        print("Fin de la tabla de transacciones en la fila: ", final)
         break
 
 # Si el archivo termina justo en la última transacción (sin línea vacía)
@@ -99,10 +99,9 @@ print("Movimientos leídos: ", len(movimientos))
 saldo_calculado = round(saldo_inicial + sum(m["monto"] for m in movimientos), 2)
 saldo_archivo = float(datos[final - 1].split(",")[-1].strip())
 
-if saldo_calculado == saldo_archivo:
-    print("Cuadra el saldo: ", saldo_calculado)
-else:
-    print("NO cuadra el saldo. Calculado: ", saldo_calculado, " Archivo: ", saldo_archivo)
+cuadra = saldo_calculado == saldo_archivo
+print("¿Cuadra el saldo?: ", cuadra)
+print("Saldo calculado: ", saldo_calculado, " Saldo del archivo: ", saldo_archivo)
 
 # 6. Guardar en silver
 
