@@ -1,0 +1,18 @@
+# Flujo de una transacción
+
+# 1. Flujo del parser (ya terminado)
+
+# 2. Flujo para el enriquecimiento de una transacción
+
+Si tengo el mismo **contrato de salida** para todas los parsers, significa que solo tengo que hacer 1 vez
+el proceso para todos los archivos.
+
+fecha id_cuenta descripcion monto y moneda
+
+Generar con código
+
+- fact_transacciona.id_trx
+- fact_transaccion.anio_mes (no se puede hacer el join)
+- fact_transaccion.subcategoria
+- fact_transaccion.moneda
+

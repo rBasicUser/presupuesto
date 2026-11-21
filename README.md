@@ -33,6 +33,12 @@ presupuesto diario = (líquido − ahorro − inversión − ya gastado) ÷ día
 - **Gráficas**: Daily Cashflow, Cumulative Daily Cashflow, gastos fijos vs variables, cambio neto en el patrimonio.
 
 
+## Flujo para actualizar una transacción
+
+1. Parser respectivo
+2. Flujo de enriquecimiento (añadir xyz columnas)
+3. Insertar
+
 ## El modelo de origen (Excel)
 
 La app hereda su lógica de `PRESUPUESTO_modelo`, un libro de Excel con esquema estrella en base devengo.
