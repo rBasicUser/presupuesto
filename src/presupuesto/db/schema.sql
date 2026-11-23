@@ -5,8 +5,6 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE fact_presupuesto(
     anio_mes       TEXT NOT NULL,
     subcategoria   TEXT NOT NULL REFERENCES dim_categorias(subcategoria),
-    gran_categoria TEXT,
-    tipo_flujo     TEXT REFERENCES dim_tipo_flujo(tipo_flujo),
     monto          REAL,
     PRIMARY KEY (anio_mes, subcategoria)
 );
@@ -48,12 +46,12 @@ CREATE TABLE dim_categorias(
 
 CREATE TABLE dim_cuentas(
     id_cuenta           TEXT PRIMARY KEY NOT NULL,
-    nombre_cuenta       TEXT,
     clase               TEXT,
     tipo_cuenta         TEXT,
     saldo_inicial       REAL,
     activa              INTEGER CHECK (activa IN (0, 1)),
-    saldo_movimiento    REAL
+    saldo_movimiento    REAL,
+    nombre_cuenta       TEXT
 );
 
 CREATE TABLE dim_objetivos(
